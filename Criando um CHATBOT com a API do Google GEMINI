@@ -1,0 +1,240 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNSlppTOE/hGtMGg+GrDCvh",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/katiamariana/Trabalhos-com-IA/blob/main/Criando%20um%20CHATBOT%20com%20a%20API%20do%20Google%20GEMINI\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "ZBL0BmxwLnW5"
+      },
+      "outputs": [],
+      "source": [
+        "!pip install -q -U google-generativeai"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import google.generativeai as genai"
+      ],
+      "metadata": {
+        "id": "1E6c11IlMpHe"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import userdata\n",
+        "\n",
+        "google_gemini_api_key = userdata.get(\"google_gemini_api_key\")\n",
+        "\n",
+        "genai.configure(api_key=google_gemini_api_key)\n"
+      ],
+      "metadata": {
+        "id": "fuIo3X7xM1h0"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "for m in genai.list_models():\n",
+        "  if \"generateContent\" in m.supported_generation_methods:\n",
+        "    print(m.name)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 225
+        },
+        "id": "9wN-HG9oPBZi",
+        "outputId": "23ce80a3-aab2-405b-aa53-1bf4172201e7"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "models/gemini-1.0-pro\n",
+            "models/gemini-1.0-pro-001\n",
+            "models/gemini-1.0-pro-latest\n",
+            "models/gemini-1.0-pro-vision-latest\n",
+            "models/gemini-1.5-flash\n",
+            "models/gemini-1.5-flash-001\n",
+            "models/gemini-1.5-flash-latest\n",
+            "models/gemini-1.5-pro\n",
+            "models/gemini-1.5-pro-001\n",
+            "models/gemini-1.5-pro-latest\n",
+            "models/gemini-pro\n",
+            "models/gemini-pro-vision\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "model = genai.GenerativeModel(\"gemini-1.5-pro-latest\")"
+      ],
+      "metadata": {
+        "id": "Ge1tcRBTjeYU"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "response= model.generate_content(\"Quem criou os modelos de IA Gemini\")\n",
+        "response.text"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 88
+        },
+        "id": "yUPXeKZwjtQw",
+        "outputId": "ac33326c-3823-4a73-d80e-f90cd858d190"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'Os modelos de IA Gemini foram criados pelo **Google**. Mais especificamente, foram desenvolvidos pela equipe do **Google DeepMind**. \\n\\nÉ importante observar que, embora o Google DeepMind seja a força motriz por trás do Gemini, o projeto também se beneficia da experiência e dos recursos de toda a organização do Google. \\n'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 15
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "chat = model.start_chat(history=[])\n",
+        "prompt = input(\"Esperando prompt: \")\n",
+        "while prompt != \"fim\":\n",
+        "  response = chat.send_message(prompt)\n",
+        "  print(response.text)\n",
+        "  prompt = input(\"Esperando prompt: \")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "H-vSYKESkBZH",
+        "outputId": "47cf28e7-2f38-4d89-9411-ed88bc2ae5a5"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Esperando prompt: De que é feita a Terra? \n",
+            "A Terra é composta por muitas camadas, como uma cebola gigante e rochosa! Aqui está uma visão geral:\n",
+            "\n",
+            "**Principais camadas com base na composição:**\n",
+            "\n",
+            "1. **Crosta:** Esta é a camada mais externa e mais fina na qual vivemos. É dividida em duas partes:\n",
+            "    * **Crosta oceânica:** Feita principalmente de rochas densas e escuras como o basalto, tem cerca de 5-10 km de espessura.\n",
+            "    * **Crosta continental:** Feita de rochas menos densas, como o granito, tem cerca de 30-50 km de espessura (mas pode ser muito mais espessa sob as cadeias de montanhas).\n",
+            "2. **Manto:** Esta é a camada mais espessa, com cerca de 2.900 km de espessura, feita principalmente de rochas ricas em ferro e magnésio. Embora seja principalmente sólido, ele flui muito lentamente ao longo do tempo (pense em caramelo muito espesso). Este movimento lento é o que impulsiona os movimentos das placas tectônicas.\n",
+            "3. **Núcleo:** No centro da Terra, com cerca de 3.500 km de raio, o núcleo é dividido em duas partes:\n",
+            "    * **Núcleo externo:** Feito principalmente de ferro líquido e níquel, com cerca de 2.200 km de espessura. Acredita-se que o movimento deste líquido gere o campo magnético da Terra.\n",
+            "    * **Núcleo interno:** Apesar de ser mais quente do que o núcleo externo, esta camada é sólida, devido à pressão intensa. É composto principalmente de ferro com um raio de cerca de 1.220 km.\n",
+            "\n",
+            "**Além dessas camadas principais, também existem:**\n",
+            "\n",
+            "* **Litosfera:** Esta camada rígida inclui a crosta e a parte superior do manto. É dividida em placas tectônicas que se movem e interagem, causando terremotos, vulcões e a formação de montanhas.\n",
+            "* **Astenosfera:** Esta camada fica abaixo da litosfera, na parte superior do manto. É mais densa que a litosfera, mas ainda pode fluir (embora muito lentamente), o que permite que as placas tectônicas se movam sobre ela.\n",
+            "\n",
+            "**Em termos de elementos químicos, a Terra é composta principalmente por:**\n",
+            "\n",
+            "1. Ferro (32,1%)\n",
+            "2. Oxigênio (30,1%)\n",
+            "3. Silício (15,1%)\n",
+            "4. Magnésio (13,9%)\n",
+            "5. Enxofre (2,9%)\n",
+            "6. Níquel (1,8%)\n",
+            "7. Cálcio (1,5%)\n",
+            "8. Alumínio (1,4%)\n",
+            "9. Outros (1,2%)\n",
+            "\n",
+            "É importante notar que a compreensão da estrutura interna da Terra é baseada em observações indiretas, como ondas sísmicas, e em estudos de rochas vulcânicas e do fundo do mar. Ainda há muito que não sabemos sobre o interior profundo do nosso planeta!\n",
+            "\n",
+            "Esperando prompt: E o sol?\n",
+            "O Sol é uma gigantesca bola de plasma quente e brilhante, muito diferente da Terra sólida e rochosa. Ele brilha por causa das reações de fusão nuclear que ocorrem em seu núcleo, onde o hidrogênio é convertido em hélio, liberando uma enorme quantidade de energia. \n",
+            "\n",
+            "Aqui está uma olhada na composição do Sol:\n",
+            "\n",
+            "**Elementos:**\n",
+            "\n",
+            "* **Hidrogênio:** Cerca de 73,5% da massa do Sol (e cerca de 92% do seu volume!)\n",
+            "* **Hélio:** Cerca de 24,9% da massa do Sol.\n",
+            "* **Elementos mais pesados:** Os 1,6% restantes são compostos por traços de oxigênio, carbono, neônio, ferro, silício, magnésio, enxofre, etc. \n",
+            "\n",
+            "**Camadas:**\n",
+            "\n",
+            "O Sol não tem uma superfície sólida como a Terra, mas os astrônomos o dividem em diferentes camadas com base em suas características:\n",
+            "\n",
+            "* **Núcleo:** Localizado no centro do Sol, aqui ocorrem as reações de fusão nuclear. As temperaturas atingem cerca de 15 milhões de graus Celsius.\n",
+            "* **Zona Radiativa:** A energia gerada no núcleo viaja através desta camada como radiação eletromagnética (fótons). \n",
+            "* **Zona Convectiva:** Nesta camada, a energia é transportada através da convecção, com gás quente subindo e gás frio descendo, semelhante à água fervente em uma panela.\n",
+            "* **Fotosfera:** Esta é a superfície visível do Sol, aquela que vemos da Terra. A temperatura aqui é de cerca de 5.500 graus Celsius.\n",
+            "* **Crom atmosfera:** Esta camada fina e avermelhada só é visível durante um eclipse solar total. \n",
+            "* **Coroa:** A camada mais externa da atmosfera do Sol, estendendo-se milhões de quilômetros no espaço. A coroa é muito mais quente que a fotosfera, atingindo temperaturas de milhões de graus Celsius.\n",
+            "\n",
+            "Embora o Sol pareça constante da Terra, ele é na verdade um objeto muito dinâmico. Há explosões solares, manchas solares e outros fenômenos que liberam enormes quantidades de energia no espaço. \n",
+            "\n",
+            "Esperando prompt: fim\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "RdEBgIXDkA4A"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
